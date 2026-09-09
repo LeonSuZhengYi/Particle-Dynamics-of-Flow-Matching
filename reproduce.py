@@ -14,20 +14,17 @@ EXPERIMENTS = {
     'local-clusters': 'sec5_final_local_cluster.py',
     'cfg': 'sec6_cfg_early_attraction.py',
     'cfg-final': 'sec6_cfg_final_cluster_distance.py',
-    'projection': 'sec4_projection_ode_discrete.py',
-    'bean-flow': 'sec4.py',
 }
-PAPER = ['convex-hull', 'local-clusters', 'cfg', 'cfg-final']
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--experiment', choices=['paper', 'all', *EXPERIMENTS], default='paper')
+    parser.add_argument('--experiment', choices=['all', *EXPERIMENTS], default='all')
     parser.add_argument('--output-dir', type=Path, default=Path(__file__).resolve().parent / 'outputs')
     args = parser.parse_args()
     output = args.output_dir.resolve()
     output.mkdir(parents=True, exist_ok=True)
-    selected = PAPER if args.experiment == 'paper' else list(EXPERIMENTS) if args.experiment == 'all' else [args.experiment]
+    selected = list(EXPERIMENTS) if args.experiment == 'all' else [args.experiment]
     env = dict(os.environ, JMLR_OUTPUT_DIR=str(output), MPLBACKEND='Agg')
     report = {'python': platform.python_version(), 'packages': {p: version(p) for p in ['numpy', 'scipy', 'matplotlib']}, 'experiments': {}}
     for name in selected:
