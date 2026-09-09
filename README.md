@@ -26,57 +26,13 @@ All examples use synthetic data in two dimensions. The data are generated at run
 | --- | --- | --- |
 | ![Convex-hull experiment](figures/convexhull_z.png) | ![Local-cluster experiment](figures/cluster_z.png) | ![CFG experiment](figures/sec6_cfg_z.png) |
 
-## Mathematical setup
-
-For the linear interpolation
-
-$$
-X_t=tY+(1-t)Z,
-$$
-
-where `Y` follows the data distribution and `Z` is standard Gaussian noise, the ideal unconditional flow used in the experiments is
-
-$$
-v_t(x)=\frac{\mathbb{E}[Y\mid X_t=x]-x}{1-t}.
-$$
-
-The posterior expectation is evaluated from the finite synthetic sample with Gaussian likelihood weights. Trajectories are integrated with explicit Euler steps. The conditional and unconditional posterior means are combined under CFG as
-
-$$
-m_{\mathrm{cfg}}(x,t;w)
-=m_{\mathrm{uncond}}(x,t)
-+w\bigl(m_{\mathrm{cond}}(x,t)-m_{\mathrm{uncond}}(x,t)\bigr),
-$$
-
-$$
-v_t^{\mathrm{cfg}}(x;w)=\frac{m_{\mathrm{cfg}}(x,t;w)-x}{1-t}.
-$$
-
-With this convention, $w=1$ gives the conditional flow. The plotted “continuous” trajectory in the convex-hull experiment is a fine-step Euler approximation rather than an exact ODE solution.
-
 ## Experiment details
 
-### Convex-hull attraction and absorption — Figure 5
+- **Figure 5:** a crescent-shaped dataset illustrates attraction to and absorption by the moving convex hull. Several Euler step sizes are included for comparison.
+- **Figure 6:** five separated nonconvex clusters illustrate final-stage local-cluster attraction and absorption.
+- **Figures 7–9:** the fifth cluster is used as the conditional target to illustrate CFG trajectories, early-stage attraction, final-cluster distance, and prediction-gap decay at several guidance scales.
 
-The data distribution is approximated by 500 samples from a nonconvex crescent-shaped region using seed `7`. The code tracks the distance from the Euler iterate $z_i$ to the moving set $t_i\operatorname{Conv}(\mathcal D)$ and marks the first entry. It evaluates step sizes `0.1`, `0.05`, and `0.025`, together with a fine-step reference using `0.002`. Figure 5 uses the `0.05` run.
-
-Main script: `experiments/sec5_flow_ode_discrete_absorption.py`
-
-### Local-cluster attraction and absorption — Figure 6
-
-The synthetic distribution consists of five separated nonconvex clusters, with 500 samples per cluster and seed `20260514`. Five Euler trajectories are initialized at $t=0.4$ and evolved with step size `0.05`. The moving target for each trajectory is $t_i B_r(\Omega_j)$, with neighborhood radius $r=0.025$. The plot reports the first entry and verifies that the discrete trajectory remains in the corresponding neighborhood afterward.
-
-Main script: `experiments/sec5_final_local_cluster.py`
-
-### Classifier-free guidance — Figures 7–9
-
-The CFG experiment uses the fifth cluster as the conditional target and integrates from a common initial point with step size `0.001`. Guidance scales are `1`, `1.5`, `2`, `2.5`, and `3`.
-
-- Figure 7 compares the full trajectories and the distance to $tB_{0.05}(\Omega_5)$ for $w=1,1.5,3$.
-- Figure 8 measures early-stage distance to the moving ball centered at the extrapolated mean for $w=1.5,3$.
-- Figure 9 fits the measured prediction gap on $t\in[0.35,0.85]$ to $\frac{C_1}{1-t}\exp\!\left(-\frac{C_2}{(1-t)^2}\right)$.
-
-Main scripts: `experiments/sec6_cfg_early_attraction.py` and `experiments/sec6_cfg_final_cluster_distance.py`
+The synthetic datasets, random seeds, numerical settings, and plotting parameters are defined near the beginning of each experiment script.
 
 ## Reproduction
 
