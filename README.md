@@ -83,8 +83,8 @@ Main scripts: `experiments/sec6_cfg_early_attraction.py` and `experiments/sec6_c
 Python 3.9 or newer is recommended.
 
 ```bash
-git clone https://github.com/LeonSuZhengYi/Particle-Dynamics-of-Flow-Matching-and-CFG-from-a-Stagewise-Geometry-Perspective.git
-cd Particle-Dynamics-of-Flow-Matching-and-CFG-from-a-Stagewise-Geometry-Perspective
+git clone https://github.com/LeonSuZhengYi/Particle-Dynamics-of-Flow-Matching.git
+cd Particle-Dynamics-of-Flow-Matching
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements.txt
